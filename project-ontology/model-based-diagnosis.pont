@@ -1,0 +1,222 @@
+; Mon Jan 16 01:45:06 EET 2023
+; 
+;+ (version "3.5")
+;+ (build "Build 663")
+
+
+(defclass %3ACLIPS_TOP_LEVEL_SLOT_CLASS "Fake class to save top-level slot information"
+	(is-a USER)
+	(role abstract)
+	(multislot has-components
+		(type INSTANCE)
+;+		(allowed-classes component)
+		(create-accessor read-write))
+	(single-slot input2
+		(type INSTANCE)
+;+		(allowed-classes systemEntity)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot input
+		(type INSTANCE)
+;+		(allowed-classes internal-component)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot input1
+		(type INSTANCE)
+;+		(allowed-classes systemEntity)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot suspect
+		(type SYMBOL)
+		(allowed-values yes no)
+		(default no)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot output
+		(type INSTANCE)
+;+		(allowed-classes component)
+		(create-accessor read-write))
+	(single-slot object
+		(type INSTANCE)
+;+		(allowed-classes systemEntity)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot msb-out
+		(type INTEGER)
+		(range 0 15)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot reading
+		(type INTEGER)
+		(range 0 31)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot short-out
+		(type INTEGER)
+		(range 0 0)
+		(default 0)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot out
+		(type INTEGER)
+		(range 0 31)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot clock
+		(type INTEGER)
+		(range 1 %3FVARIABLE)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot theoretical
+		(type INTEGER)
+		(range 0 31)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot outputs
+		(type INSTANCE)
+;+		(allowed-classes sensor)
+		(create-accessor read-write))
+	(multislot inputs
+		(type INSTANCE)
+;+		(allowed-classes command)
+		(create-accessor read-write))
+	(single-slot value
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass systemEntity
+	(is-a USER)
+	(role abstract)
+	(single-slot suspect
+		(type SYMBOL)
+		(allowed-values yes no)
+		(default no)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot out
+		(type INTEGER)
+		(range 0 31)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass command
+	(is-a systemEntity)
+	(role concrete))
+
+(defclass component
+	(is-a systemEntity)
+	(role abstract))
+
+(defclass sensor
+	(is-a component)
+	(role concrete)
+	(single-slot theoretical
+		(type INTEGER)
+		(range 0 31)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot out
+		(type INTEGER)
+		(range 0 31)
+;+		(cardinality 0 0)
+		(create-accessor read-write))
+	(single-slot reading
+		(type INTEGER)
+		(range 0 31)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot input
+		(type INSTANCE)
+;+		(allowed-classes internal-component)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass internal-component
+	(is-a component)
+	(role concrete)
+	(single-slot short-out
+		(type INTEGER)
+		(range 0 0)
+		(default 0)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot output
+		(type INSTANCE)
+;+		(allowed-classes component)
+		(create-accessor read-write))
+	(single-slot msb-out
+		(type INTEGER)
+		(range 0 15)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot input2
+		(type INSTANCE)
+;+		(allowed-classes systemEntity)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot input1
+		(type INSTANCE)
+;+		(allowed-classes systemEntity)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass adder
+	(is-a internal-component)
+	(role concrete))
+
+(defclass multiplier
+	(is-a internal-component)
+	(role concrete))
+
+(defclass circuit
+	(is-a systemEntity)
+	(role concrete)
+	(multislot outputs
+		(type INSTANCE)
+;+		(allowed-classes sensor)
+		(create-accessor read-write))
+	(multislot has-components
+		(type INSTANCE)
+;+		(allowed-classes component)
+		(create-accessor read-write))
+	(multislot inputs
+		(type INSTANCE)
+;+		(allowed-classes command)
+		(create-accessor read-write)))
+
+(defclass data
+	(is-a USER)
+	(role abstract)
+	(single-slot clock
+		(type INTEGER)
+		(range 1 %3FVARIABLE)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot object
+		(type INSTANCE)
+;+		(allowed-classes systemEntity)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot value
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass command_data
+	(is-a data)
+	(role concrete)
+	(single-slot object
+		(type INSTANCE)
+;+		(allowed-classes command)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass reading_data
+	(is-a data)
+	(role concrete)
+	(single-slot object
+		(type INSTANCE)
+;+		(allowed-classes sensor)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
